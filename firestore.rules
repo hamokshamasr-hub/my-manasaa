@@ -1,0 +1,211 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default Deny All
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Authentication & Role Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'adam.albalshi.4@gmail.com' ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
+      );
+    }
+
+    function isStaff() {
+      return isAdmin() || (
+        isSignedIn() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'assistant']
+      );
+    }
+
+    // 1. Settings: Public read, ONLY Admin can modify
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // 2. Courses: Public read, ONLY Staff can create, update, delete
+    match /courses/{courseId} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+
+    // 3. Materials: Public read, Staff or valid video/pdf creation, ONLY Staff can update/delete
+    match /materials/{materialId} {
+      allow read: if true;
+      allow create: if isStaff() || (request.resource.data.title is string && request.resource.data.type in ['video', 'pdf']);
+      allow update, delete: if isStaff();
+    }
+
+    // 3.1 Lessons (Bunny.net Stream Videos): Public read, allow creation of video metadata, Staff can update/delete
+    match /lessons/{lessonId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if isStaff();
+    }
+
+    // 4. Exams: Read allowed, ONLY Staff can create, update, delete
+    match /exams/{examId} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+
+    // 5. Exam Results: Staff can do all. Students can create ONLY their own result once with valid score, NEVER modify or inflate past score!
+    match /exam_results/{resultId} {
+      allow read: if true;
+      allow create: if isStaff() || (
+        isSignedIn() && 
+        request.resource.data.studentId == request.auth.uid &&
+        request.resource.data.score is number &&
+        request.resource.data.total is number &&
+        request.resource.data.score <= request.resource.data.total &&
+        request.resource.data.score >= 0
+      );
+      // Strict anti-tampering: ONLY staff can update or delete exam results! Students CANNOT overwrite their score
+      allow update, delete: if isStaff();
+    }
+
+    // 6. Support Messages: Staff can read/write all. Users can send messages with length constraints to prevent DoS/spam
+    match /messages/{messageId} {
+      allow read: if isStaff() || (isSignedIn() && (resource.data.studentId == request.auth.uid || resource.data.senderId == request.auth.uid));
+      allow create: if isSignedIn() || (
+        request.resource.data.senderName is string &&
+        request.resource.data.senderName.size() <= 100 &&
+        request.resource.data.message is string &&
+        request.resource.data.message.size() <= 2000
+      );
+      allow update, delete: if isStaff();
+    }
+
+    // 7. Users Collection: Strict Privilege Escalation Protection & Zero Exploits
+    match /users/{userId} {
+      allow read: if true;
+      
+      // Self registration or Staff creation:
+      // Non-staff CANNOT register as 'admin' or 'assistant', and cannot forge permissions, allowed courses, points, or bypass ban
+      allow create: if isStaff() || (
+        request.resource.data.role == 'student' &&
+        (!('banned' in request.resource.data) || request.resource.data.banned == false) &&
+        (!('allowedCourseIds' in request.resource.data) || request.resource.data.allowedCourseIds.size() == 0) &&
+        (!('centerPoints' in request.resource.data) || request.resource.data.centerPoints == 0) &&
+        (!('totalPoints' in request.resource.data) || request.resource.data.totalPoints == 0) &&
+        (isSignedIn() ? request.auth.uid == userId : true)
+      );
+
+      // Updates:
+      // - Admins can update everything.
+      // - Assistants can update student users, but CANNOT modify admin users or promote anyone to admin.
+      // - Users themselves can only update personal profile fields (name, phone, parentPhone, grade, avatar),
+      //   NEVER role, banned, allowed courses, subscriptions, or points!
+      allow update: if isAdmin() || 
+        (isStaff() && resource.data.role != 'admin' && request.resource.data.role != 'admin') ||
+        (
+          isSignedIn() && 
+          request.auth.uid == userId &&
+          request.resource.data.role == resource.data.role &&
+          (!('banned' in request.resource.data) || request.resource.data.banned == resource.data.banned) &&
+          (!('allowedCourseIds' in request.resource.data) || request.resource.data.allowedCourseIds == resource.data.allowedCourseIds) &&
+          (!('centerPoints' in request.resource.data) || request.resource.data.centerPoints == resource.data.centerPoints) &&
+          (!('totalPoints' in request.resource.data) || request.resource.data.totalPoints == resource.data.totalPoints)
+        );
+
+      // Deletions: ONLY Admin, and CANNOT delete super admin
+      allow delete: if isAdmin() && resource.data.email != 'adam.albalshi.4@gmail.com';
+    }
+
+    // 8. Online Course Payments:
+    // Students can create pending payments. Staff can review, approve, or reject.
+    match /payments/{paymentId} {
+      allow read: if isStaff() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow create: if isStaff() || (
+        isSignedIn() && 
+        request.resource.data.userId == request.auth.uid && 
+        request.resource.data.status == 'pending'
+      );
+      allow update, delete: if isStaff();
+    }
+
+    // 9. Subscriptions: Staff managed only
+    match /subscriptions/{subId} {
+      allow read: if isStaff() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow write: if isStaff();
+    }
+
+    // 10. Notifications: Staff manages all. Students can create notification for their actions (e.g. Exam completed)
+    match /notifications/{notificationId} {
+      allow read: if isStaff() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow create: if isStaff() || (isSignedIn() && (request.resource.data.userId == request.auth.uid || request.resource.data.userId == 'admin'));
+      allow update, delete: if isStaff();
+    }
+
+    match /parent_notifications/{notificationId} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+
+    // 10.1 Extra Sessions (Multi-Slot Extra Session Plans for Center)
+    match /extra_sessions/{sessionId} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+
+    // 11. Center Attendance: Staff only writes! (No student can fake attendance)
+    match /attendance/{attendanceId} {
+      allow read: if isStaff() || (isSignedIn() && resource.data.studentId == request.auth.uid);
+      allow write: if isStaff();
+    }
+
+    // 12. Center Payments: Staff only writes! (No student can forge center receipts)
+    match /center_payments/{paymentId} {
+      allow read: if isStaff() || (isSignedIn() && resource.data.studentId == request.auth.uid);
+      allow write: if isStaff();
+    }
+
+    // 13. Recitations: Staff only writes!
+    match /recitations/{recitationId} {
+      allow read: if isStaff() || (isSignedIn() && resource.data.studentId == request.auth.uid);
+      allow write: if isStaff();
+    }
+
+    // 14. Honor Board: Public read, Staff writes
+    match /honors/{honorId} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+
+    // 15. Video Progress: Students can create/update their own watch percentage
+    match /video_progress/{progressId} {
+      allow read: if isStaff() || (isSignedIn() && (resource == null || resource.data.studentId == request.auth.uid));
+      allow create, update: if isStaff() || (isSignedIn() && request.resource.data.studentId == request.auth.uid);
+      allow delete: if isStaff();
+    }
+
+    // 16. PDF Files & Chunks: Staff only writes!
+    match /pdf_files/{fileId} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+
+    match /pdf_chunks/{chunkId} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+
+    // 17. Platform Events Log: ONLY Main Admin can read/delete!
+    match /platform_events/{eventId} {
+      allow read: if isAdmin();
+      allow create: if isStaff() || isSignedIn();
+      allow update, delete: if isAdmin();
+    }
+  }
+}

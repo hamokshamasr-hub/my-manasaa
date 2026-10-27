@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>منصة مستر محمد صابر | لغة إنجليزية</title>
+    <meta name="description" content="منصة مستر محمد صابر (منصة صابر) المنصة التعليمية الأولى لتعلم اللغة الإنجليزية. أفضل منصة الإنجليزي للمرحلتين الإعدادية والثانوية." />
+    <meta name="keywords" content="منصة مستر صابر, منصة مستر محمد صابر, منصة صابر, منصة الإنجليزي, منصة تعليم الإنجليزي, المنصة الإنجليزية, مستر محمد صابر, لغة إنجليزية" />
+    <meta property="og:title" content="منصة مستر محمد صابر | لغة إنجليزية" />
+    <meta property="og:description" content="منصة مستر محمد صابر (منصة صابر) المنصة التعليمية الأولى لتعلم اللغة الإنجليزية. أفضل منصة الإنجليزي للمرحلتين الإعدادية والثانوية." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+      (function() {
+        try {
+          const theme = localStorage.getItem('theme');
+          if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (_) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root">
+      <!-- Aesthetic Initial Splash Screen (replaced seamlessly on React mount) -->
+      <div style="position: fixed; inset: 0; background: #020617; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; color: #fff; font-family: 'Cairo', sans-serif;" dir="rtl">
+        <div style="position: relative; width: 72px; height: 72px; margin-bottom: 24px;">
+          <div style="position: absolute; inset: -8px; border-radius: 20px; border: 2px dashed rgba(99, 102, 241, 0.4); animation: spin 8s linear infinite;"></div>
+          <div style="width: 72px; height: 72px; border-radius: 18px; background: linear-gradient(135deg, #4f46e5, #0d9488); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(79, 70, 229, 0.35);">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+          </div>
+        </div>
+        <div style="font-size: 22px; font-weight: 900; margin-bottom: 6px; letter-spacing: 0.5px;">منصة مستر محمد صابر</div>
+        <div style="font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 24px;">جاري تحميل المنصة التعليمية...</div>
+        <div style="width: 180px; height: 4px; background: #1e293b; border-radius: 999px; overflow: hidden; position: relative;">
+          <div style="position: absolute; top: 0; left: 0; height: 100%; width: 45%; background: linear-gradient(90deg, #4f46e5, #14b8a6); border-radius: 999px; animation: pulseBar 1.2s ease-in-out infinite alternate;"></div>
+        </div>
+        <style>
+          @keyframes spin { 100% { transform: rotate(360deg); } }
+          @keyframes pulseBar { 0% { left: 0; width: 30%; } 100% { left: 70%; width: 30%; } }
+        </style>
+      </div>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

@@ -1,0 +1,10 @@
+--- src/contexts/SettingsContext.tsx
++++ src/contexts/SettingsContext.tsx
+@@ -8,2 +8,3 @@
+   showFinalRevisions: boolean;
++  showMiddleSchool?: boolean;
+   grades?: string[];
+@@ -25,2 +26,3 @@
+   showFinalRevisions: false,
++  showMiddleSchool: true,
+   grades: ['الصف الأول الثانوي', 'الصف الثاني الثانوي', 'الصف الثالث الثانوي'],

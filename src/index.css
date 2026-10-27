@@ -1,0 +1,580 @@
+@import "tailwindcss";
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Cairo', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+@layer base {
+  *, ::before, ::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply text-slate-900 bg-slate-50 antialiased transition-colors duration-300;
+    font-family: 'Cairo', sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom Selection Highlight */
+  ::selection {
+    background-color: #4f46e5;
+    color: #ffffff;
+  }
+
+  /* Modern Sleek Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(241, 245, 249, 0.7);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.5);
+    border-radius: 9999px;
+    transition: background-color 0.2s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(99, 102, 241, 0.7);
+  }
+
+  .dark ::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.7);
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: rgba(71, 85, 105, 0.6);
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: rgba(129, 140, 248, 0.7);
+  }
+
+  /* Accessible & Crisp Focus Rings */
+  :focus-visible {
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+  }
+  
+  html.dark body {
+    background-color: #070b14;
+    color: #f8fafc;
+  }
+
+  /* Universal dark mode structural foundations */
+  .dark .bg-white:not(.qr-code-clean-card):not(.keep-white) {
+    background-color: #0f172a;
+    border-color: #1e293b;
+  }
+  .dark [class*="bg-white/9"]:not(.keep-white),
+  .dark [class*="bg-white/8"]:not(.keep-white),
+  .dark [class*="bg-white/7"]:not(.keep-white) {
+    background-color: #111827;
+    border-color: #1e293b;
+  }
+  .dark .bg-slate-50 {
+    background-color: #070b14;
+    border-color: #1e293b;
+  }
+  .dark [class*="bg-slate-50/"] {
+    background-color: #0b1120;
+    border-color: #1e293b;
+  }
+  .dark .bg-slate-100:not(.qr-code-clean-card *) {
+    background-color: #162032;
+    border-color: #243247;
+  }
+  .dark [class*="bg-slate-100/"] {
+    background-color: #162032;
+    border-color: #243247;
+  }
+  .dark .bg-slate-200 {
+    background-color: #1e293b;
+    border-color: #334155;
+  }
+  .dark [class*="bg-slate-200/"] {
+    background-color: #1e293b;
+    border-color: #334155;
+  }
+  .dark .border-slate-100, 
+  .dark .border-slate-200, 
+  .dark .border-slate-300 {
+    border-color: #1e293b;
+  }
+
+  /* Strict Protection for Scannable QR Cards */
+  .qr-code-clean-card,
+  .dark .qr-code-clean-card,
+  .qr-code-clean-card *,
+  .dark .qr-code-clean-card * {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    border-color: #e2e8f0 !important;
+  }
+
+  /* Preserve High Contrast for Bright/Yellow Badges & Medals */
+  .dark .bg-amber-400,
+  .dark .bg-amber-500,
+  .dark .bg-yellow-400,
+  .dark .bg-amber-300 {
+    color: #020617 !important;
+  }
+  .dark .bg-amber-400 *,
+  .dark .bg-amber-500 *,
+  .dark .bg-yellow-400 * {
+    color: #020617 !important;
+  }
+
+  /* High-Contrast Typography in Dark Mode (protecting badges/buttons with light backgrounds) */
+  .dark .text-slate-900:not(.keep-dark-text):not(.bg-amber-400 *):not(.bg-amber-500 *):not(.bg-yellow-400 *):not(.qr-code-clean-card *),
+  .dark .text-slate-800:not(.keep-dark-text):not(.bg-amber-400 *):not(.bg-amber-500 *):not(.bg-yellow-400 *):not(.qr-code-clean-card *) {
+    color: #f8fafc;
+  }
+  .dark .text-slate-700:not(.keep-dark-text):not(.bg-amber-400 *):not(.bg-amber-500 *):not(.qr-code-clean-card *) {
+    color: #e2e8f0;
+  }
+  .dark .text-slate-600:not(.keep-dark-text):not(.qr-code-clean-card *) {
+    color: #cbd5e1;
+  }
+  .dark .text-slate-500:not(.keep-dark-text):not(.qr-code-clean-card *) {
+    color: #94a3b8;
+  }
+  .dark .text-slate-400:not(.keep-dark-text) {
+    color: #64748b;
+  }
+
+  /* Semantic status color dark mode corrections for high contrast & clarity */
+  .dark .bg-emerald-50,
+  .dark [class*="bg-emerald-50/"],
+  .dark .bg-emerald-100/60,
+  .dark .bg-emerald-100/70,
+  .dark .bg-emerald-100/80,
+  .dark .bg-emerald-100,
+  .dark [class*="bg-emerald-100/"] {
+    background-color: rgba(6, 78, 59, 0.45);
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .dark .bg-emerald-200,
+  .dark [class*="bg-emerald-200"] {
+    background-color: rgba(6, 78, 59, 0.7);
+    color: #a7f3d0;
+    border-color: rgba(52, 211, 153, 0.4);
+  }
+  .dark .text-emerald-950,
+  .dark .text-emerald-900,
+  .dark .text-emerald-800,
+  .dark .text-emerald-700 {
+    color: #6ee7b7;
+  }
+
+  .dark .bg-rose-50,
+  .dark [class*="bg-rose-50/"],
+  .dark .bg-rose-100/50,
+  .dark .bg-rose-100/60,
+  .dark .bg-rose-100/70,
+  .dark .bg-rose-100/80,
+  .dark .bg-rose-100,
+  .dark [class*="bg-rose-100/"] {
+    background-color: rgba(136, 19, 55, 0.45);
+    border-color: rgba(244, 63, 94, 0.35);
+  }
+  .dark .bg-rose-200,
+  .dark [class*="bg-rose-200"] {
+    background-color: rgba(136, 19, 55, 0.7);
+    color: #fecdd3;
+    border-color: rgba(251, 113, 133, 0.4);
+  }
+  .dark .text-rose-950,
+  .dark .text-rose-900,
+  .dark .text-rose-800,
+  .dark .text-rose-700 {
+    color: #fda4af;
+  }
+
+  .dark .bg-amber-50,
+  .dark [class*="bg-amber-50/"],
+  .dark .bg-amber-100/60,
+  .dark .bg-amber-100/70,
+  .dark .bg-amber-100/80,
+  .dark .bg-amber-100,
+  .dark [class*="bg-amber-100/"] {
+    background-color: rgba(120, 53, 15, 0.45);
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  .dark .bg-amber-200,
+  .dark [class*="bg-amber-200"] {
+    background-color: rgba(120, 53, 15, 0.7);
+    color: #fde68a;
+    border-color: rgba(251, 191, 36, 0.4);
+  }
+  .dark .text-amber-950,
+  .dark .text-amber-900,
+  .dark .text-amber-800,
+  .dark .text-amber-700 {
+    color: #fde68a;
+  }
+
+  .dark .bg-indigo-50,
+  .dark [class*="bg-indigo-50/"],
+  .dark .bg-indigo-100/60,
+  .dark .bg-indigo-100/70,
+  .dark .bg-indigo-100/80,
+  .dark .bg-indigo-100,
+  .dark [class*="bg-indigo-100/"] {
+    background-color: rgba(49, 46, 129, 0.45);
+    border-color: rgba(99, 102, 241, 0.35);
+  }
+  .dark .bg-indigo-200,
+  .dark [class*="bg-indigo-200"] {
+    background-color: rgba(49, 46, 129, 0.7);
+    color: #c7d2fe;
+    border-color: rgba(129, 140, 248, 0.4);
+  }
+  .dark .text-indigo-950,
+  .dark .text-indigo-900,
+  .dark .text-indigo-800,
+  .dark .text-indigo-700 {
+    color: #c7d2fe;
+  }
+
+  .dark .bg-blue-50,
+  .dark [class*="bg-blue-50/"],
+  .dark .bg-blue-100,
+  .dark [class*="bg-blue-100/"] {
+    background-color: rgba(30, 58, 138, 0.45);
+    border-color: rgba(59, 130, 246, 0.35);
+  }
+  .dark .bg-blue-200,
+  .dark [class*="bg-blue-200"] {
+    background-color: rgba(30, 58, 138, 0.7);
+    color: #bfdbfe;
+  }
+  .dark .text-blue-950,
+  .dark .text-blue-900,
+  .dark .text-blue-800,
+  .dark .text-blue-700 {
+    color: #bfdbfe;
+  }
+
+  /* Table styling in Dark Mode */
+  .dark table {
+    border-color: #1e293b;
+  }
+  .dark thead {
+    background-color: #111827;
+  }
+  .dark thead th {
+    color: #f1f5f9;
+    border-color: #1e293b;
+  }
+  .dark tbody tr {
+    border-color: #1e293b;
+  }
+  .dark tbody tr:hover {
+    background-color: rgba(30, 41, 59, 0.6);
+  }
+  .dark tbody td {
+    color: #f8fafc;
+    border-color: #1e293b;
+  }
+
+  /* Input fields & Select elements in Dark Mode */
+  .dark input:not([type="checkbox"]):not([type="radio"]):not(.bg-transparent),
+  .dark select:not(.bg-transparent),
+  .dark textarea:not(.bg-transparent) {
+    background-color: #0b1120;
+    color: #f9fafb;
+    border-color: #1e293b;
+  }
+  .dark select.bg-transparent {
+    background-color: transparent !important;
+  }
+  .dark input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.85;
+    cursor: pointer;
+  }
+  .dark select option {
+    background-color: #0f172a;
+    color: #f9fafb;
+  }
+  .dark input:focus:not(.bg-transparent),
+  .dark select:focus:not(.bg-transparent),
+  .dark textarea:focus:not(.bg-transparent) {
+    border-color: #6366f1;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+  }
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    color: #64748b;
+  }
+  .dark .shadow-sm, 
+  .dark .shadow-md, 
+  .dark .shadow-xl {
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6);
+  }
+}
+
+@layer utilities {
+  /* Glassmorphism Classes */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+  }
+
+  .dark .glass-card {
+    background: rgba(30, 41, 59, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-header {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  }
+
+  .dark .glass-header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(51, 65, 85, 0.8);
+  }
+
+  /* Luxury Ambient Glows */
+  .glow-indigo {
+    box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.25);
+  }
+
+  .glow-emerald {
+    box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.25);
+  }
+
+  .glow-amber {
+    box-shadow: 0 10px 30px -5px rgba(245, 158, 11, 0.25);
+  }
+
+  .glow-rose {
+    box-shadow: 0 10px 30px -5px rgba(244, 63, 94, 0.25);
+  }
+
+  /* Card Hover Lift */
+  .card-hover-lift {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .card-hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 35px -10px rgba(15, 23, 42, 0.12);
+  }
+
+  /* Gradient Text Helpers */
+  .text-gradient-indigo {
+    background: linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #b45309 0%, #d97706 40%, #f59e0b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Smooth animations */
+  .float-animation {
+    animation: float 6s ease-in-out infinite;
+  }
+  .float-delayed {
+    animation: float 6s ease-in-out 2s infinite;
+  }
+  .pulse-soft {
+    animation: pulseSoft 3s ease-in-out infinite;
+  }
+  .shimmer-sheen {
+    position: relative;
+    overflow: hidden;
+  }
+  .shimmer-sheen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+    animation: shimmer 2.5s infinite;
+  }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-16px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes pulseSoft {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.03); }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media print {
+  @page {
+    size: auto;
+    margin: 8mm;
+  }
+  html, body, html.dark, html.dark body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .print\:hidden,
+  .no-print,
+  button,
+  header,
+  footer,
+  nav {
+    display: none !important;
+  }
+
+  /* Reset any dark mode background or text overrides when printing */
+  .dark .bg-white,
+  .dark [class*="bg-white/"],
+  .dark .bg-slate-50,
+  .dark [class*="bg-slate-50/"],
+  .dark .bg-slate-100,
+  .dark [class*="bg-slate-100/"],
+  .dark .bg-slate-200,
+  .dark [class*="bg-slate-200/"],
+  .dark .bg-slate-800,
+  .dark .bg-slate-900,
+  .dark .bg-slate-950 {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-color: #cbd5e1 !important;
+  }
+  .dark .text-slate-900, 
+  .dark .text-slate-800,
+  .dark .text-slate-700, 
+  .dark .text-slate-600,
+  .dark .text-slate-500,
+  .dark .text-slate-400,
+  .dark .text-white {
+    color: #000000 !important;
+  }
+  .dark table, .dark thead, .dark thead th, .dark tbody tr, .dark tbody td {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-color: #cbd5e1 !important;
+  }
+
+  /* In-DOM Direct Print Container - 100% Reliable across all browsers & iframes */
+  body.app-printing-active > *:not(#app-direct-print-container) {
+    display: none !important;
+  }
+  body.app-printing-active #app-direct-print-container {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    visibility: visible !important;
+  }
+  body.app-printing-active #app-direct-print-container * {
+    visibility: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Single card isolated print mode */
+  body.printing-single-card * {
+    visibility: hidden !important;
+  }
+  body.printing-single-card #printable-student-card,
+  body.printing-single-card #printable-student-card * {
+    visibility: visible !important;
+  }
+  body.printing-single-card #printable-student-card {
+    position: fixed !important;
+    left: 50% !important;
+    top: 20mm !important;
+    transform: translateX(-50%) !important;
+    width: 95mm !important;
+    max-width: 95mm !important;
+    margin: 0 !important;
+    padding: 16px !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(99, 102, 241, 0.4) !important;
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #0f172a 100%) !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    overflow: hidden !important;
+  }
+}
+
+/* ------------------------------------------------------------- */
+/* BUNNY PLAYER & VIDEO FULLSCREEN RULES WITH MOVING WATERMARK  */
+/* Ensures watermark and video scale together to entire screen   */
+/* ------------------------------------------------------------- */
+.bunny-player-container:fullscreen,
+.bunny-player-container:-webkit-full-screen,
+.bunny-player-container:-moz-full-screen,
+.bunny-player-container:-ms-fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  background-color: #000000 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  border: none !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147483647 !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+}
+
+.bunny-player-container:fullscreen iframe,
+.bunny-player-container:-webkit-full-screen iframe,
+.bunny-player-container:-moz-full-screen iframe,
+.bunny-player-container:-ms-fullscreen iframe {
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+}
+

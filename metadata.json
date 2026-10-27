@@ -1,0 +1,8 @@
+{
+  "name": "منصة مستر محمد صابر",
+  "description": "منصة مستر محمد صابر (منصة صابر) المنصة التعليمية الأولى لتعلم اللغة الإنجليزية. أفضل منصة الإنجليزي للمرحلتين الإعدادية والثانوية.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

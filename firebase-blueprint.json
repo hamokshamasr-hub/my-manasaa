@@ -1,0 +1,297 @@
+{
+  "entities": {
+    "Material": {
+      "title": "Material",
+      "description": "Educational content (Video or PDF) uploaded by the admin.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "url": { "type": "string" },
+        "videoBase64": { "type": "string", "maxLength": 5242880 },
+        "type": { "type": "string", "enum": ["video", "pdf"] },
+        "courseId": { "type": "string" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["title", "type", "courseId", "createdAt"]
+    },
+    "Course": {
+      "title": "Course",
+      "description": "A course offering with dynamic pricing.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "price": { "type": "number" },
+        "grade": { "type": "string" },
+        "imageBase64": { "type": "string", "maxLength": 5242880 },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["name", "price", "grade", "createdAt"]
+    },
+    "Settings": {
+      "title": "Platform Settings",
+      "description": "Global settings for the platform configurable by admin.",
+      "type": "object",
+      "properties": {
+        "platformName": { "type": "string" },
+        "teacherName": { "type": "string" },
+        "yearsOfExperience": { "type": "number" },
+        "studentCount": { "type": "number" },
+        "aboutText": { "type": "string" },
+        "showFinalRevisions": { "type": "boolean" },
+        "grades": { "type": "array", "items": { "type": "string" } },
+        "autoReplyMessage": { "type": "string" },
+        "whatsappNumber": { "type": "string" },
+        "showWhatsApp": { "type": "boolean" },
+        "contactEmail": { "type": "string" },
+        "contactPhone": { "type": "string" },
+        "contactAddress": { "type": "string" },
+        "heroImageBase64": { "type": "string", "maxLength": 5242880 },
+        "heroVideoUrl": { "type": "string" },
+        "enableExams": { "type": "boolean" },
+        "enableSupport": { "type": "boolean" },
+        "enableMaterials": { "type": "boolean" },
+        "enableGoogleAuth": { "type": "boolean" },
+        "paymentWalletNumber": { "type": "string" },
+        "paymentInstapayUsername": { "type": "string" },
+        "paymentInstructions": { "type": "string" },
+        "updatedAt": { "type": "number" }
+      },
+      "required": ["platformName", "teacherName", "yearsOfExperience", "studentCount", "aboutText", "showFinalRevisions", "grades", "autoReplyMessage", "updatedAt"]
+    },
+    "User": {
+      "title": "User",
+      "description": "A user of the platform.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "parentPhone": { "type": "string" },
+        "role": { "type": "string", "enum": ["student", "assistant", "admin"] },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["uid", "email", "name", "phone", "parentPhone", "role", "createdAt"]
+    },
+    "Exam": {
+      "title": "Exam",
+      "description": "An electronic exam created by the admin.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "courseId": { "type": "string" },
+        "showAnswers": { "type": "boolean" },
+        "questions": { 
+          "type": "array", 
+          "items": { 
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "text": { "type": "string" },
+              "options": { "type": "array", "items": { "type": "string" } },
+              "correctOptionIndex": { "type": "number" }
+            },
+            "required": ["id", "text", "options", "correctOptionIndex"]
+          } 
+        },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["title", "courseId", "questions", "createdAt"]
+    },
+    "ExamResult": {
+      "title": "Exam Result",
+      "description": "A student's result for an exam.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "examId": { "type": "string" },
+        "examTitle": { "type": "string" },
+        "courseId": { "type": "string" },
+        "score": { "type": "number" },
+        "total": { "type": "number" },
+        "percentage": { "type": "number" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["studentId", "examId", "examTitle", "courseId", "score", "total", "percentage", "createdAt"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Support message between student and admin.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "text": { "type": "string" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["studentId", "senderId", "text", "createdAt"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "A payment receipt uploaded by a student for a course.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "userName": { "type": "string" },
+        "courseId": { "type": "string" },
+        "courseName": { "type": "string" },
+        "amount": { "type": "number" },
+        "paymentMethod": { "type": "string", "enum": ["instapay", "wallet"] },
+        "receiptBase64": { "type": "string", "maxLength": 1048576 },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "createdAt": { "type": "number" },
+        "updatedAt": { "type": "number" }
+      },
+      "required": ["userId", "userEmail", "userName", "courseId", "courseName", "amount", "paymentMethod", "receiptBase64", "status", "createdAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "System and academic notifications sent to users.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["userId", "title", "message", "read", "createdAt"]
+    },
+    "Attendance": {
+      "title": "Attendance",
+      "description": "Student attendance and absence records at the academic center.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "studentCode": { "type": "string" },
+        "date": { "type": "string" },
+        "time": { "type": "string" },
+        "status": { "type": "string", "enum": ["present", "absent", "late"] },
+        "timestamp": { "type": "number" },
+        "notes": { "type": "string" }
+      },
+      "required": ["studentId", "studentName", "date", "status", "timestamp"]
+    },
+    "CenterPayment": {
+      "title": "Center Payment",
+      "description": "Tuition and center payment records with receipt numbers.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "studentCode": { "type": "string" },
+        "month": { "type": "string" },
+        "amount": { "type": "number" },
+        "date": { "type": "string" },
+        "timestamp": { "type": "number" },
+        "notes": { "type": "string" },
+        "receiptNumber": { "type": "string" }
+      },
+      "required": ["studentId", "studentName", "month", "amount", "date", "timestamp", "receiptNumber"]
+    },
+    "Recitation": {
+      "title": "Recitation",
+      "description": "Student oral and recitation exam scores at the center.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "studentCode": { "type": "string" },
+        "title": { "type": "string" },
+        "score": { "type": "number" },
+        "finalGrade": { "type": "number" },
+        "percentage": { "type": "number" },
+        "date": { "type": "string" },
+        "timestamp": { "type": "number" },
+        "notes": { "type": "string" }
+      },
+      "required": ["studentId", "studentName", "title", "score", "finalGrade", "percentage", "date", "timestamp"]
+    },
+    "HonorStudent": {
+      "title": "Honor Student",
+      "description": "Top performing honor student profile for the honor board.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "grade": { "type": "string" },
+        "rankTitle": { "type": "string" },
+        "percentage": { "type": "number" },
+        "school": { "type": "string" },
+        "governorate": { "type": "string" },
+        "year": { "type": "string" },
+        "notes": { "type": "string" },
+        "avatarBase64": { "type": "string" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["name", "grade", "percentage", "createdAt"]
+    }
+  },
+  "firestore": {
+    "courses/{courseId}": {
+      "schema": { "$ref": "#/entities/Course" },
+      "description": "Available courses and their prices."
+    },
+    "materials/{materialId}": {
+      "schema": { "$ref": "#/entities/Material" },
+      "description": "Educational content like videos and PDFs."
+    },
+    "settings/main": {
+      "schema": { "$ref": "#/entities/Settings" },
+      "description": "Singleton document containing global platform settings."
+    },
+    "users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profiles including their role."
+    },
+    "exams/{examId}": {
+      "schema": { "$ref": "#/entities/Exam" },
+      "description": "Exams for different grades."
+    },
+    "exam_results/{resultId}": {
+      "schema": { "$ref": "#/entities/ExamResult" },
+      "description": "Student exam results."
+    },
+    "messages/{messageId}": {
+      "schema": { "$ref": "#/entities/Message" },
+      "description": "Support messages."
+    },
+    "payments/{paymentId}": {
+      "schema": { "$ref": "#/entities/Payment" },
+      "description": "Payment receipts uploaded by students."
+    },
+    "notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/Notification" },
+      "description": "In-app notifications."
+    },
+    "attendance/{attendanceId}": {
+      "schema": { "$ref": "#/entities/Attendance" },
+      "description": "Student center attendance and absence logs."
+    },
+    "center_payments/{paymentId}": {
+      "schema": { "$ref": "#/entities/CenterPayment" },
+      "description": "Center physical tuition payment receipts."
+    },
+    "recitations/{recitationId}": {
+      "schema": { "$ref": "#/entities/Recitation" },
+      "description": "Student oral recitation logs and marks."
+    },
+    "honors/{honorId}": {
+      "schema": { "$ref": "#/entities/HonorStudent" },
+      "description": "Honors board student entries."
+    },
+    "platform_events/{eventId}": {
+      "description": "Live administrative audit and security events accessible only to super admin."
+    },
+    "video_progress/{progressId}": {
+      "description": "Student video lecture watch percentage logs."
+    },
+    "pdf_files/{fileId}": {
+      "description": "Metadata for uploaded educational PDF documents."
+    },
+    "pdf_chunks/{chunkId}": {
+      "description": "Chunked slices of large educational PDF files."
+    }
+  }
+}

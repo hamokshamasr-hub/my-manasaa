@@ -1,0 +1,53 @@
+--- src/pages/StudentDashboard.tsx
++++ src/pages/StudentDashboard.tsx
+@@ -464,9 +464,5 @@
+                               ) : (
+-                                <a 
+-                                  href={item.url}
+-                                  target="_blank"
+-                                  rel="noreferrer"
+-                                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold transition-all bg-emerald-100 text-emerald-700 hover:bg-emerald-600 hover:text-white"
++                                <button 
++                                  onClick={() => setPlayingVideo(item)}
++                                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold transition-all bg-emerald-100 text-emerald-700 hover:bg-emerald-600 hover:text-white"
+                                 >
+                                   <Download className="w-5 h-5" />
+                                   تحميل وعرض المذكرة
+-                                </a>
++                                </button>
+                               )}
+@@ -522,9 +518,5 @@
+                                 ) : (
+-                                  <a 
+-                                    href={item.url}
+-                                    target="_blank"
+-                                    rel="noreferrer"
+-                                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold transition-all bg-emerald-100 text-emerald-700 hover:bg-emerald-600 hover:text-white"
++                                  <button 
++                                    onClick={() => setPlayingVideo(item)}
++                                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold transition-all bg-emerald-100 text-emerald-700 hover:bg-emerald-600 hover:text-white"
+                                   >
+                                     <Download className="w-5 h-5" />
+                                     تحميل وعرض المذكرة
+-                                  </a>
++                                  </button>
+                                 )}
+@@ -594,4 +586,8 @@
+               {playingVideo.url ? (
+-                <iframe
+-                  src={getEmbedUrl(playingVideo.url)}
+-                  className="w-full h-[70vh] bg-black border-0"
+-                  allowFullScreen
+-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+-                ></iframe>
++                playingVideo.type === 'pdf' ? (
++                  <iframe src={getEmbedUrl(playingVideo.url)} className="w-full h-[85vh] bg-white border-0"></iframe>
++                ) : (
++                  <iframe
++                    src={getEmbedUrl(playingVideo.url)}
++                    className="w-full h-[70vh] bg-black border-0"
++                    allowFullScreen
++                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
++                  ></iframe>
++                )
+               ) : (
